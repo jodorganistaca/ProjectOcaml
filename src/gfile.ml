@@ -3,6 +3,8 @@ open Printf
 
 type path = string
 
+type dot = string
+
 (* Format of text files:
    % This is a comment
 
@@ -17,26 +19,38 @@ type path = string
    e 0 2 8
 
 *)
+(*let stringArcToDot edge n1 n2 w = function
+  | 
+*)
+let stringToDot id1 id2 
 
-let write_file path graph =
+let export stringGraph = 
+  let rec loop acu in
+  try Scanf.sscanf stringGraph "e %d %d %s" (fun id1 id2 edge -> string_of_int(id1)^" -> "^string_of_int(id2)^ "[label ="^edge^"];")
+  with 
+    End_of_file-> 
 
-  (* Open a write-file. *)
-  let ff = open_out path in
 
-  (* Write in this file. *)
-  fprintf ff "%% This is a graph.\n\n" ;
 
-  (* Write all nodes (with fake coordinates) *)
-  n_iter_sorted graph (fun id -> fprintf ff "n %.1f 1.0\n" (float_of_int id)) ;
-  fprintf ff "\n" ;
+    let write_file path graph =
 
-  (* Write all arcs *)
-  e_iter graph (fun id1 id2 lbl -> fprintf ff "e %d %d %s\n" id1 id2 lbl) ;
+      (* Open a write-file. *)
+      let ff = open_out path in
 
-  fprintf ff "\n%% End of graph\n" ;
+      (* Write in this file. *)
+      fprintf ff "%% This is a graph.\n\n" ;
 
-  close_out ff ;
-  ()
+      (* Write all nodes (with fake coordinates) *)
+      n_iter_sorted graph (fun id -> fprintf ff "n %.1f 1.0\n" (float_of_int id)) ;
+      fprintf ff "\n" ;
+
+      (* Write all arcs *)
+      e_iter graph (fun id1 id2 lbl -> fprintf ff "e %d %d %s\n" id1 id2 lbl) ;
+
+      fprintf ff "\n%% End of graph\n" ;
+
+      close_out ff ;
+      ()
 
 (* Reads a line with a node. *)
 let read_node id graph line =
