@@ -1,5 +1,8 @@
 open Gfile
 open Tools
+open Ford_Fulkerson
+open Graph
+
 
 
 let () =
@@ -26,8 +29,10 @@ let () =
   let graph = from_file infile in
   let newgraph = gmap graph (int_of_string) in
   let graphModified = add_arc newgraph 3 1 100 in
+  let res = find_path graphModified _source _sink in print_out_arcs res ;
   let outgraph = gmap graphModified (string_of_int) in
   export outgraph "./graphs/graph.dot";
+
 
 
 
