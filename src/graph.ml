@@ -49,7 +49,7 @@ let e_fold gr f acu = List.fold_left (fun acu (id1, out) -> List.fold_left (fun 
 
 let rec print_out_solution solution =
   match solution with 
-  |None->Printf.printf "\n"
+  |None->Printf.printf "None\n"
   |Some (node_id :: tail) -> Printf.printf "id : %d \n" node_id ; print_out_solution (Some tail)
   |Some [] -> Printf.printf "\n"
 

@@ -2,14 +2,14 @@ digraph dot_graph {
   rankdir=LR;
   size="8,5"
   node [shape=circle];
-  3 -> 4 [label = "1"]; 
-  7 -> 9 [label = "1"]; 
-  6 -> 8 [label = "1"]; 
-  6 -> 7 [label = "1"]; 
-  5 -> 6 [label = "1"]; 
-  4 -> 5 [label = "1"]; 
-  2 -> 0 [label = "2"]; 
-  2 -> 3 [label = "1"]; 
-  0 -> 2 [label = "2"]; 
-  0 -> 1 [label = "2"]; 
+  2 -> 4 [label = "12"]; 
+  3 -> 4 [label = "5"]; 
+  3 -> 2 [label = "2"]; 
+  3 -> 1 [label = "11"]; 
+  1 -> 4 [label = "1"]; 
+  1 -> 5 [label = "21"]; 
+  4 -> 5 [label = "14"]; 
+  0 -> 2 [label = "8"]; 
+  0 -> 3 [label = "10"]; 
+  0 -> 1 [label = "8"]; 
 }
