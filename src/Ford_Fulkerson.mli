@@ -2,7 +2,7 @@ open Tools
 open Graph
 
 (*Find a path form the source node to the sink node *)
-val find_path: 'a graph -> id -> id ->'a out_arcs option
+val find_path: 'a graph -> id -> id ->id list option
 
 (*Find the minimum label value in a paht
   val augmentation: 'a out_arcs -> 'a

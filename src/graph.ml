@@ -47,8 +47,9 @@ let e_iter gr f = List.iter (fun (id1, out) -> List.iter (fun (id2, x) -> f id1 
 
 let e_fold gr f acu = List.fold_left (fun acu (id1, out) -> List.fold_left (fun acu (id2, x) -> f acu id1 id2 x) acu out) acu gr
 
-let rec print_out_arcs out_arcs =
-  match out_arcs with 
+let rec print_out_solution solution =
+  match solution with 
   |None->Printf.printf "\n"
-  |Some (id,lbl)::tail -> Printf.printf "(id : %d  lbl : %d)\n" id lbl ; print_out_arcs tail
+  |Some (node_id :: tail) -> Printf.printf "id : %d \n" node_id ; print_out_solution (Some tail)
+  |Some [] -> Printf.printf "\n"
 
