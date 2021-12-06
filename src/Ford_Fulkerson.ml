@@ -1,4 +1,5 @@
 open Graph
+open Tools
 
 let rec traiter_arc_sortants arcs_sortants graph idp forbidden_nodes = 
   match arcs_sortants with
@@ -27,6 +28,43 @@ and find_path graph ids idp forbidden_nodes =
 
   in 
   loop graph ids idp [] forbidden_nodes
+
+
+let augmentation graph path =
+
+  let rec loop graph path comp = 
+    match path with 
+    |None -> failwith "ERROR : No path"
+    |Some ([]) -> comp
+    |Some (p::[])->comp
+    |Some (p::tail) -> let value_label = Graph.find_arc graph p (List.nth tail 0) in 
+      match value_label with 
+      |None -> failwith "ERROR : we should have an arc between nodes in our solution"
+      |Some v -> if v < comp then loop graph (Some tail) v else loop graph (Some tail) comp
+  in
+  match path with 
+  |None -> failwith "ERROR : No path"
+  |Some p -> let first_arc = (Graph.find_arc graph (List.nth p 0) (List.nth p 1)) in 
+    match first_arc with
+    |None->failwith "ERROR : no first arc"
+    |Some fa -> loop graph path fa
+
+
+
+(* Penser à faire un e_fold*)
+let rec update_flow graph path aug = 
+  let loop graph path aug final_graph = 
+    match path with 
+    |None -> final_graph
+    |Some (n::[])-> final_graph
+    |Some ([])-> failwith "We  should never have an empty path"
+    |Some (n1::tail) -> 
+
+
+
+
+
+
 
 
 
