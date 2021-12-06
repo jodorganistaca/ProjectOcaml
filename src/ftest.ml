@@ -27,7 +27,7 @@ let () =
   let newgraph = gmap graph (int_of_string) in
   let graphModified = add_arc newgraph 3 1 100 in
   let outgraph = gmap graphModified (string_of_int) in
-  export outgraph "./graphs/graph.dot";
+  export outgraph "../graphs/graph.dot";
 
 
 

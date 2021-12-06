@@ -1,7 +1,7 @@
 open Tools
 open Graph
 
-(*Find a path form the source node to the sink node *)
+(*Find a path form the source node to the sink node 
 val find_path: 'a graph -> id -> id -> 'a out_arcs 
 
 (*Find the minimum label value in a paht*)
@@ -12,3 +12,4 @@ val update_flow: 'a graph -> 'a graph
 
 (*Give the flow max of the graph *)
 val flow_max: 'a graph -> 'a
+*)
