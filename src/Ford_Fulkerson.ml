@@ -1,38 +1,49 @@
-open Gfile
-open Tools
-open Queue
 open Graph
 
-let iter_out_arcs = 
-
-let find_path graph ids idp =
-  let q = Queue.create () in
-  let a = Queue.add ids q in 
-  let rec loop graph id acu =
-    match Queue.is_empty q with
-    | true -> acu
-    | false -> let e = Queue.take q in
-      let find_arc = Graph.find_arc graph e idp in 
-      match find_arc with
-      | Some arc -> a::acu
-      | None -> e::acu ; loop graph (iter_out_arcs (Graph.out_arcs graph e)) acu
+let rec traiter_arc_sortants arcs_sortants graph idp forbidden_nodes = 
+  match arcs_sortants with
+  |[]->[]
+  |(id,lbl)::tail-> let forbidden_nodes = id::forbidden_nodes in 
+    let res = find_path graph id idp forbidden_nodes in 
+    match res with 
+    |None -> traiter_arc_sortants tail graph idp forbidden_nodes
+    |Some list_id -> list_id
 
 
-(***)
-(*
-let bfs graph node goal = 
-  let q = Queue.create () in
-  let s = Set.empty ();
-  Set.add node s ;
-  Queue.add node q in 
-  let resp = [] in
-  let rec f resp = 
-    if !Queue.is_empty q 
-    then 
-      let v = Queue.take q in
-        Printf.printf "%d" v ;
-        if v == goal
-        then resp
-        else List.iter (Queue.add e q) (List.filter (fun x -> Set.mem x s) graph.out_arcs v);
-  f resp
-*)
+(*ajouter une liste forbidden des noeuds déja visités pour éviter les récurssions infinies *)
+and neighbor_not_in_forbidden_nodes list_forbidden (id,lbl)=
+  if List.mem id list_forbidden then false else true
+
+and find_path graph ids idp forbidden_nodes =
+  let rec loop graph ids idp acu forbidden_nodes =
+    let a_path = (Graph.find_arc graph ids idp) in 
+    match (a_path) with
+    |Some arc -> let acu = ids::acu in Some (acu@[idp])
+    |None -> let neighbor = List.filter (neighbor_not_in_forbidden_nodes forbidden_nodes ) (Graph.out_arcs graph ids) in 
+      let acu = (traiter_arc_sortants neighbor graph idp forbidden_nodes)@acu in
+      match acu with
+      |[]-> None
+      |res-> Some ([ids]@res)
+
+  in 
+  loop graph ids idp [] forbidden_nodes
+
+(*let iter_out_arcs = 
+**)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
