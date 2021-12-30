@@ -34,11 +34,13 @@ let rec print_list = function
 
 let rec augmentation graph path =
   match path with 
-  |None->Printf.printf "None\n"
-  |Some [] -> Printf.printf "\n"
+  |None-> 0
+  |Some [] -> 0
   |Some (node_id :: tail) -> 
     if (List.length tail > 0) then
     let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
     match a_path with 
-    |Some arc -> Printf.printf "%d\n" arc ; augmentation graph (Some tail)
-    |None -> Printf.printf "None\n"
+    |Some arc -> if (arc > (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
+    |None -> 0
+    else 0
+  

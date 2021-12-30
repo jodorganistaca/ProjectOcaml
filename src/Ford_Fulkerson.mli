@@ -5,7 +5,7 @@ open Graph
 val find_path: 'a graph -> id -> id ->id list -> id list option
 
 (*Find the minimum label value in a path*)
-val augmentation: int graph -> id list option -> unit
+val augmentation: int graph -> id list option -> int
 
   (*Update the flows in the a graph after finding a path 
   val update_flow: 'a graph -> 'a graph

@@ -21,4 +21,4 @@ clean:
 	-rm -rf *.cmo ftest *.cmi
 
 test:
-	./ftest ../graphs/graph_cycle 2 1 ../graphs/graph_cycle_out
+	./ftest ../graphs/graph1 2 5 ../graphs/graph1_out
