@@ -28,22 +28,17 @@ and find_path graph ids idp forbidden_nodes =
   in 
   loop graph ids idp [] forbidden_nodes
 
-(*let iter_out_arcs = 
-**)
+let rec print_list = function 
+[] -> ()
+| e::l -> print_int e ; print_string " " ; print_list l    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+let rec augmentation graph path =
+  match path with 
+  |None->Printf.printf "None\n"
+  |Some [] -> Printf.printf "\n"
+  |Some (node_id :: tail) -> 
+    if (List.length tail > 0) then
+    let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+    match a_path with 
+    |Some arc -> Printf.printf "%d\n" arc ; augmentation graph (Some tail)
+    |None -> Printf.printf "None\n"

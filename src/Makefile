@@ -19,3 +19,6 @@ demo: build
 
 clean:
 	-rm -rf *.cmo ftest *.cmi
+
+test:
+	./ftest ../graphs/graph_cycle 2 1 ../graphs/graph_cycle_out
