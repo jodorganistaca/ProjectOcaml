@@ -24,4 +24,4 @@ test:
 	./ftest ../graphs/graph1 0 5 ../graphs/graph1_out
 
 dot:
-	dot -Tsvg ../graphs/updated_graph.dot > ../graph/updated_graph.svg
+	dot -Tsvg ../graphs/graph1.dot > ../graphs/graph1.svg

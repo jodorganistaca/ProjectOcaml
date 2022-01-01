@@ -50,16 +50,30 @@ let rec update_flow aug path graph =
     let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
     match a_path with 
     |Some arc -> 
-      if((int_of_string arc) = aug) then
-      let newgraph = gmap graph (int_of_string) in
-      let newgraph = remove_arc newgraph node_id (List.hd tail) in 
-      let newgraph = gmap (add_arc newgraph (List.hd tail) node_id (int_of_string arc)) (string_of_int)
+      if(arc = aug) then
+      let newgraph = remove_arc graph node_id (List.hd tail) in 
+      let newgraph = add_arc newgraph (List.hd tail) node_id arc
       in update_flow aug (Some tail) newgraph 
-      else  
-      let newgraph = gmap graph (int_of_string) in
-      let newgraph = (add_arc newgraph (List.hd tail) node_id aug) in 
+      else
+      let newgraph = add_arc graph (List.hd tail) node_id aug in 
       let newgraph = remove_arc newgraph node_id (List.hd tail) in 
-      let newgraph = gmap (add_arc newgraph node_id (List.hd tail) ((int_of_string arc) - aug)) (string_of_int) in Printf.printf "arc : %d - aug: %d res: %d\n" (int_of_string arc) aug ((int_of_string arc) - aug);
+      let newgraph = add_arc newgraph node_id (List.hd tail) (arc - aug) in
       update_flow aug (Some tail) newgraph 
     |None -> graph
     else graph
+
+let rec print_out_arcs outa =
+  match outa with 
+  |((node_id, node_arc) :: tail) -> node_arc + print_out_arcs tail
+  |[] -> 0
+
+let rec flow_max graph _source _sink =
+  let rec exist_path = find_path graph _source _sink [] in print_out_solution exist_path ;
+  match exist_path with 
+  |None-> let outa = out_arcs graph _sink in Printf.printf "sol: %d \n" (print_out_arcs outa); graph 
+  |Some [] -> graph
+  |Some path -> 
+  let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug ;
+  let updated_graph = update_flow aug exist_path graph in
+  flow_max updated_graph _source _sink
+    

@@ -8,8 +8,7 @@ val find_path: 'a graph -> id -> id ->id list -> id list option
 val augmentation: int graph -> id list option -> int
 
 (*Update the flows in the a graph after finding a path *)
-val update_flow: int -> id list option -> string graph -> string graph
+val update_flow: int -> id list option -> int graph -> int graph
 
-(*Give the flow max of the graph
-val flow_max: 'a graph -> 'a
- *)
+(*Give the flow max of the graph *)
+val flow_max: int graph -> id -> id -> int graph
