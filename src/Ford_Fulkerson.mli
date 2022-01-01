@@ -7,9 +7,9 @@ val find_path: 'a graph -> id -> id ->id list -> id list option
 (*Find the minimum label value in a path*)
 val augmentation: int graph -> id list option -> int
 
-  (*Update the flows in the a graph after finding a path 
-  val update_flow: 'a graph -> 'a graph
+(*Update the flows in the a graph after finding a path *)
+val update_flow: int -> id list option -> string graph -> string graph
 
-  (*Give the flow max of the graph *)
-  val flow_max: 'a graph -> 'a
-*)
+(*Give the flow max of the graph
+val flow_max: 'a graph -> 'a
+ *)

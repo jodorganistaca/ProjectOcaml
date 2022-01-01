@@ -1,3 +1,4 @@
+open Tools
 open Graph
 
 let rec traiter_arc_sortants arcs_sortants graph idp forbidden_nodes = 
@@ -28,19 +29,37 @@ and find_path graph ids idp forbidden_nodes =
   in 
   loop graph ids idp [] forbidden_nodes
 
-let rec print_list = function 
-[] -> ()
-| e::l -> print_int e ; print_string " " ; print_list l    
-
 let rec augmentation graph path =
   match path with 
-  |None-> 0
-  |Some [] -> 0
+  |None-> Int.max_int
+  |Some [] -> Int.max_int
   |Some (node_id :: tail) -> 
     if (List.length tail > 0) then
     let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
     match a_path with 
-    |Some arc -> if (arc > (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
-    |None -> 0
-    else 0
-  
+    |Some arc -> if (arc < (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
+    |None -> Int.max_int
+    else Int.max_int
+
+let rec update_flow aug path graph =
+  match path with 
+  |None-> graph
+  |Some [] -> graph
+  |Some (node_id :: tail) -> 
+    if (List.length tail > 0) then
+    let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+    match a_path with 
+    |Some arc -> 
+      if((int_of_string arc) = aug) then
+      let newgraph = gmap graph (int_of_string) in
+      let newgraph = remove_arc newgraph node_id (List.hd tail) in 
+      let newgraph = gmap (add_arc newgraph (List.hd tail) node_id (int_of_string arc)) (string_of_int)
+      in update_flow aug (Some tail) newgraph 
+      else  
+      let newgraph = gmap graph (int_of_string) in
+      let newgraph = (add_arc newgraph (List.hd tail) node_id aug) in 
+      let newgraph = remove_arc newgraph node_id (List.hd tail) in 
+      let newgraph = gmap (add_arc newgraph node_id (List.hd tail) ((int_of_string arc) - aug)) (string_of_int) in Printf.printf "arc : %d - aug: %d res: %d\n" (int_of_string arc) aug ((int_of_string arc) - aug);
+      update_flow aug (Some tail) newgraph 
+    |None -> graph
+    else graph

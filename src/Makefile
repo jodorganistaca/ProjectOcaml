@@ -4,7 +4,7 @@ build:
 	# ocamlbuild ftest.native
 	ocamlc -c graph.mli graph.ml gfile.mli gfile.ml tools.mli tools.ml Ford_Fulkerson.mli Ford_Fulkerson.ml
 	ocamlc -o ftest graph.cmo gfile.cmo tools.cmo Ford_Fulkerson.cmo ftest.ml
-	#dot -Tsvg ../graphs/graph.dot > ../graph/graphDotToSvg.svg
+	#
 format:
 	ocp-indent --inplace src/*
 
@@ -21,4 +21,7 @@ clean:
 	-rm -rf *.cmo ftest *.cmi
 
 test:
-	./ftest ../graphs/graph1 2 5 ../graphs/graph1_out
+	./ftest ../graphs/graph1 0 5 ../graphs/graph1_out
+
+dot:
+	dot -Tsvg ../graphs/updated_graph.dot > ../graph/updated_graph.svg

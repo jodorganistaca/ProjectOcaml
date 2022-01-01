@@ -29,9 +29,11 @@ let () =
   let graph = from_file infile in
   let newgraph = gmap graph (int_of_string) in
   let graphModified = add_arc newgraph 0 1 1 in
-  let res = find_path graphModified _source _sink [] in Printf.printf "%d \n" (augmentation graphModified res) ;
+  let res = find_path graphModified _source _sink [] in print_out_solution res ;
+  let aug = (augmentation graphModified res) in   
   let outgraph = gmap graphModified (string_of_int) in
-  export outgraph "../graphs/simple_graph.dot";
+  let updated_graph = update_flow aug res outgraph in
+  export updated_graph "../graphs/updated_graph.dot";
 
 
 
