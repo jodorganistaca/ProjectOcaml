@@ -2,7 +2,6 @@
 build:
 	@echo "\n==== COMPILING ====\n"
 	ocamlbuild ftest.native
-
 format:
 	ocp-indent --inplace src/*
 

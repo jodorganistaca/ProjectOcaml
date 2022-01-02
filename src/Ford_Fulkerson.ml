@@ -1,3 +1,4 @@
+open Tools
 open Graph
 open Tools
 
@@ -29,63 +30,50 @@ and find_path graph ids idp forbidden_nodes =
   in 
   loop graph ids idp [] forbidden_nodes
 
-
-let augmentation graph path =
-
-  let rec loop graph path comp = 
-    match path with 
-    |None -> failwith "ERROR : No path"
-    |Some ([]) -> comp
-    |Some (p::[])->comp
-    |Some (p::tail) -> let value_label = Graph.find_arc graph p (List.nth tail 0) in 
-      match value_label with 
-      |None -> failwith "ERROR : we should have an arc between nodes in our solution"
-      |Some v -> if v < comp then loop graph (Some tail) v else loop graph (Some tail) comp
-  in
+let rec augmentation graph path =
   match path with 
-  |None -> failwith "ERROR : No path"
-  |Some p -> let first_arc = (Graph.find_arc graph (List.nth p 0) (List.nth p 1)) in 
-    match first_arc with
-    |None->failwith "ERROR : no first arc"
-    |Some fa -> loop graph path fa
+  |None-> Int.max_int
+  |Some [] -> Int.max_int
+  |Some (node_id :: tail) -> 
+    if (List.length tail > 0) then
+      let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+      match a_path with 
+      |Some arc -> if (arc < (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
+      |None -> Int.max_int
+    else Int.max_int
 
+let rec update_flow aug path graph =
+  match path with 
+  |None-> graph
+  |Some [] -> graph
+  |Some (node_id :: tail) -> 
+    if (List.length tail > 0) then
+      let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+      match a_path with 
+      |Some arc -> 
+        if(arc = aug) then
+          let newgraph = remove_arc graph node_id (List.hd tail) in 
+          let newgraph = add_arc newgraph (List.hd tail) node_id arc
+          in update_flow aug (Some tail) newgraph 
+        else
+          let newgraph = add_arc graph (List.hd tail) node_id aug in 
+          let newgraph = remove_arc newgraph node_id (List.hd tail) in 
+          let newgraph = add_arc newgraph node_id (List.hd tail) (arc - aug) in
+          update_flow aug (Some tail) newgraph 
+      |None -> graph
+    else graph
 
+let rec print_out_arcs outa =
+  match outa with 
+  |((node_id, node_arc) :: tail) -> node_arc + print_out_arcs tail
+  |[] -> 0
 
-(* Penser à faire un e_fold*)
-let rec update_flow graph path aug = 
-  let loop graph path aug final_graph = 
-    match path with 
-    |None -> final_graph
-    |Some (n::[])-> final_graph
-    |Some ([])-> failwith "We  should never have an empty path"
-    |Some (n1::tail) -> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+let rec flow_max graph _source _sink =
+  let rec exist_path = find_path graph _source _sink [] in print_out_solution exist_path ;
+  match exist_path with 
+  |None-> let outa = out_arcs graph _sink in Printf.printf "sol: %d \n" (print_out_arcs outa); graph 
+  |Some [] -> graph
+  |Some path -> 
+    let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug ;
+    let updated_graph = update_flow aug exist_path graph in
+    flow_max updated_graph _source _sink
