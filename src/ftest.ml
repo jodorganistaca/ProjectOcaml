@@ -26,11 +26,11 @@ let () =
   in
 
   (* Open file *)
-  let graph = from_file infile in export graph "../graphs/graph1.dot";
+  let graph = from_file infile in export graph "./graphs/graph1.dot";
   let newgraph = gmap graph (int_of_string) in
   let updated_graph = flow_max newgraph _source _sink in
   let outgraph = gmap updated_graph (string_of_int) in  
-  export outgraph "../graphs/updated_graph.dot";
+  export outgraph "./graphs/updated_graph.dot";
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile outgraph in
 

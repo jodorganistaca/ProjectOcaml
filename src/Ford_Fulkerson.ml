@@ -35,10 +35,10 @@ let rec augmentation graph path =
   |Some [] -> Int.max_int
   |Some (node_id :: tail) -> 
     if (List.length tail > 0) then
-    let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
-    match a_path with 
-    |Some arc -> if (arc < (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
-    |None -> Int.max_int
+      let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+      match a_path with 
+      |Some arc -> if (arc < (augmentation graph (Some tail))) then arc else augmentation graph (Some tail)
+      |None -> Int.max_int
     else Int.max_int
 
 let rec update_flow aug path graph =
@@ -47,19 +47,19 @@ let rec update_flow aug path graph =
   |Some [] -> graph
   |Some (node_id :: tail) -> 
     if (List.length tail > 0) then
-    let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
-    match a_path with 
-    |Some arc -> 
-      if(arc = aug) then
-      let newgraph = remove_arc graph node_id (List.hd tail) in 
-      let newgraph = add_arc newgraph (List.hd tail) node_id arc
-      in update_flow aug (Some tail) newgraph 
-      else
-      let newgraph = add_arc graph (List.hd tail) node_id aug in 
-      let newgraph = remove_arc newgraph node_id (List.hd tail) in 
-      let newgraph = add_arc newgraph node_id (List.hd tail) (arc - aug) in
-      update_flow aug (Some tail) newgraph 
-    |None -> graph
+      let a_path = (Graph.find_arc graph node_id (List.hd tail)) in 
+      match a_path with 
+      |Some arc -> 
+        if(arc = aug) then
+          let newgraph = remove_arc graph node_id (List.hd tail) in 
+          let newgraph = add_arc newgraph (List.hd tail) node_id arc
+          in update_flow aug (Some tail) newgraph 
+        else
+          let newgraph = add_arc graph (List.hd tail) node_id aug in 
+          let newgraph = remove_arc newgraph node_id (List.hd tail) in 
+          let newgraph = add_arc newgraph node_id (List.hd tail) (arc - aug) in
+          update_flow aug (Some tail) newgraph 
+      |None -> graph
     else graph
 
 let rec print_out_arcs outa =
@@ -73,7 +73,7 @@ let rec flow_max graph _source _sink =
   |None-> let outa = out_arcs graph _sink in Printf.printf "sol: %d \n" (print_out_arcs outa); graph 
   |Some [] -> graph
   |Some path -> 
-  let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug ;
-  let updated_graph = update_flow aug exist_path graph in
-  flow_max updated_graph _source _sink
-    
+    let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug ;
+    let updated_graph = update_flow aug exist_path graph in
+    flow_max updated_graph _source _sink
+
