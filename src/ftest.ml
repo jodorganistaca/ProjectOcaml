@@ -2,6 +2,7 @@ open Gfile
 open Tools
 open Ford_Fulkerson
 open Graph
+open Bipartite
 
 
 
@@ -26,6 +27,10 @@ let () =
   in
 
   (* Open file *)
+
+  let () = export_to_graph "./pb_bp/confbp" in 
+
+
   let graph = from_file infile in export graph "./graphs/graph1.dot";
   let newgraph = gmap graph (int_of_string) in
   let updated_graph = flow_max newgraph _source _sink in
@@ -35,4 +40,3 @@ let () =
   let () = write_file outfile outgraph in
 
   ()
-
