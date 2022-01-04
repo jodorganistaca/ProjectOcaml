@@ -73,6 +73,15 @@ let give_number_to_h list_of_h =
   in 
   loop list_of_h 0
 
+let are_compatible ha (g,d,p,s,m,n) = 
+  match ha with
+  |(gender,day,pet,smoke,mixg)->
+    let res = ((String.equal d day)||(String.equal d "both"))
+              &&(String.equal p pet)
+              &&(String.equal s smoke)
+              &&(((String.equal m "mixed")&&(String.equal mixg "mixed"))||(((String.equal m "nomixed")||(String.equal mixg "nomixed"))&&(String.equal gender g))) in res
+
+
 let export_to_graph path = 
   let infile = open_in path in
   let test = all_hosts infile in
