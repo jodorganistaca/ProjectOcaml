@@ -28,19 +28,19 @@ let () =
 
   (* Open file *)
 
-  let () = export_to_graph "../pb_bp/confbp" in 
-  let path_bip = open_in "../pb_bp/confbp" in
+  let () = export_to_graph "./pb_bp/confbp" in 
+  let path_bip = open_in "./pb_bp/confbp" in
   let hosts_list = all_hosts path_bip in
-  let path_bip = open_in "../pb_bp/confbp" in
+  let path_bip = open_in "./pb_bp/confbp" in
   let hacker_list = all_hackers path_bip in  
   let graph_init = create_nodes hacker_list hosts_list in 
   let graph_init = create_arcs graph_init hacker_list hosts_list in 
-  let () = write_file "../graphs/graph_init" graph_init in export graph_init "../graphs/graph_init.dot";
-  let graph = from_file infile in export graph "../graphs/graph1.dot";
+  let () = write_file "./graphs/graph_init" graph_init in export graph_init "./graphs/graph_init.dot";
+  let graph = from_file infile in export graph "./graphs/graph1.dot";
   let newgraph = gmap graph (int_of_string) in
   let updated_graph = flow_max newgraph _source _sink in
   let outgraph = gmap updated_graph (string_of_int) in  
-  export outgraph "../graphs/updated_graph.dot";
+  export outgraph "./graphs/updated_graph.dot";
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile outgraph in
 
