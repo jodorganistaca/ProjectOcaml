@@ -92,11 +92,30 @@ let create_nodes list_ha list_ho =
   in 
   loop list_ha list_ho empty_graph 0
 
+let create_arcs graph list_ha list_ho = 
+  let rec loop graph list_ha list_ho len_ha len_ho =
+    match (list_ha) with
+    |([])->graph
+    |(ha::tha)-> 
+      let rec loop2 graph ha list_ho len_ha len_ho =
+        match (list_ho) with
+        |([])->graph
+        |(ho::tho)-> 
+          let graph = new_arc graph (len_ha - List.length list_ha) ((len_ha + len_ho) - List.length list_ho) "1"
+          in loop2 graph ha tho len_ha len_ho in
+      let graph = loop2 graph ha list_ho len_ha len_ho
+      in loop graph tha list_ho len_ha len_ho
+  in 
+  loop graph list_ha list_ho (List.length list_ha) (List.length list_ho)
 
 let export_to_graph path = 
   let infile = open_in path in
   let test = all_hosts infile in
-  print_list_hosts test ; 
+  print_list_hosts test ;
+  let infile = open_in path in
+  let testH = all_hackers infile in  
+  print_list_hackers testH;
+   
 
 
 
