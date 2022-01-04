@@ -1,4 +1,5 @@
 open String 
+open Graph
 
 
 type path = string
@@ -82,10 +83,21 @@ let are_compatible ha (g,d,p,s,m,n) =
               &&(((String.equal m "mixed")&&(String.equal mixg "mixed"))||(((String.equal m "nomixed")||(String.equal mixg "nomixed"))&&(String.equal gender g))) in res
 
 
+let create_nodes list_ha list_ho = 
+  let rec loop list_ha list_ho graph id =
+    match (list_ha, list_ho) with
+    |([], [])->graph
+    |(h::t,_)-> let graph = new_node graph id in loop t list_ho graph (id+1)
+    |([], h::t)-> let graph = new_node graph id in loop [] t graph (id+1)
+  in 
+  loop list_ha list_ho empty_graph 0
+
+
 let export_to_graph path = 
   let infile = open_in path in
   let test = all_hosts infile in
-  print_list_hosts test
+  print_list_hosts test ; 
+
 
 
 
