@@ -18,4 +18,4 @@ val all_hackers: in_channel -> hacker list
 
 val create_nodes: hacker list -> host list -> 'a graph
 
-val create_arcs: string Graph.graph -> 'a list -> 'b list -> string Graph.graph
+val create_arcs: string Graph.graph -> hacker list -> host list -> string Graph.graph
