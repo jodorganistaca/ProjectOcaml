@@ -1,5 +1,8 @@
-ho m friday pets smoke mixed 1
-ho m both nopets nomoke nomixed 1
-ho f saturday pets nosmoke mixed 1
 ha m friday nopets smoke mixed
-ha f saturday nopets smoke nomixed 
+ha f saturday nopets smoke nomixed
+ha f both nopets smoke mixed
+ha m saturday pets nosmoke mixed 
+ho m friday nopets smoke mixed 1
+ho f both nopets smoke nomixed 1
+ho f both nopets smoke mixed 1
+ho m saturday pets nosmoke mixed 1

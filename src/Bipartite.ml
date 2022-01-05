@@ -78,7 +78,7 @@ let are_compatible ha (g,d,p,s,m,n) =
   match ha with
   |(gender,day,pet,smoke,mixg)->
     let res = ((String.equal d day)||(String.equal d "both"))
-              &&(String.equal p pet)
+              &&((String.equal p pet))
               &&(String.equal s smoke)
               &&(((String.equal m "mixed")&&(String.equal mixg "mixed"))||(((String.equal m "nomixed")||(String.equal mixg "nomixed"))&&(String.equal gender g))) in res
 
@@ -92,11 +92,31 @@ let create_nodes list_ha list_ho =
   in 
   loop list_ha list_ho empty_graph 0
 
+let create_arcs graph list_ha list_ho = 
+  let rec loop graph list_ha list_ho len_ha len_ho =
+    match (list_ha) with
+    |([])->graph
+    |(ha::tha)-> 
+      let rec loop2 graph ha list_ho len_ha len_ho =
+        match (list_ho) with
+        |([])->graph
+        |(ho::tho)-> if (are_compatible ha ho) then 
+            let graph = new_arc graph (len_ha - List.length list_ha) ((len_ha + len_ho) - List.length list_ho) "1" in loop2 graph ha tho len_ha len_ho else
+            loop2 graph ha tho len_ha len_ho in
+      let graph = loop2 graph ha list_ho len_ha len_ho
+      in loop graph tha list_ho len_ha len_ho
+  in 
+  loop graph list_ha list_ho (List.length list_ha) (List.length list_ho)
+
 
 let export_to_graph path = 
   let infile = open_in path in
   let test = all_hosts infile in
-  print_list_hosts test ; 
+  print_list_hosts test ;
+  let infile = open_in path in
+  let testH = all_hackers infile in  
+  print_list_hackers testH;
+
 
 
 
