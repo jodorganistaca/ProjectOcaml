@@ -27,7 +27,7 @@ let export graph dot_file_path =
   let ff = open_out dot_file_path in
   fprintf ff "digraph dot_graph {
   rankdir=LR;
-  size=\"8,5\"
+  size=\"18,15\"
   node [shape=circle];\n";
   e_iter graph (fun id1 id2 lbl -> fprintf ff "  %d -> %d [label = \"%s\"]; \n" id1 id2 lbl);
   fprintf ff "}";

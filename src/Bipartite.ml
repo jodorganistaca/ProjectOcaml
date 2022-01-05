@@ -1,5 +1,7 @@
 open String 
 open Graph
+open Gfile
+open Tools
 
 
 type path = string
@@ -86,7 +88,7 @@ let are_compatible ha (g,d,p,s,m,n) =
 let create_nodes list_ha list_ho = 
   let rec loop list_ha list_ho graph id =
     match (list_ha, list_ho) with
-    |([], [])->graph
+    |([], [])->let graph = new_node graph (-1) in let graph = new_node graph (-2) in graph
     |(h::t,_)-> let graph = new_node graph id in loop t list_ho graph (id+1)
     |([], h::t)-> let graph = new_node graph id in loop [] t graph (id+1)
   in 
@@ -107,6 +109,40 @@ let create_arcs graph list_ha list_ho =
       in loop graph tha list_ho len_ha len_ho
   in 
   loop graph list_ha list_ho (List.length list_ha) (List.length list_ho)
+let add_source_to_graph graph list_ha =
+  let rec loop graph list_ha len_ha =
+    match (list_ha) with 
+    |[]->graph
+    |ha::t->let new_graph = (new_arc graph (-1) (len_ha-List.length list_ha) "1") in loop new_graph t len_ha
+  in 
+  loop graph list_ha (List.length list_ha)
+
+let add_sink_to_graph graph list_ho len_ha=
+  let rec loop graph list_ho len_ho len_ha =
+    match (list_ho) with 
+    |[]->graph
+    |(gender, day, pet, smoke, mixg, number)::t->let new_graph = (new_arc graph (len_ha+(len_ho-List.length list_ho)) (-2) number) in loop new_graph t len_ho len_ha
+  in 
+  loop graph list_ho (List.length list_ho) len_ha
+
+let remove_specific_arcs_from_nodes graph id = 
+  let outa = out_arcs graph id in 
+  let rec loop graph id outa = 
+    match outa with 
+    |[]->graph
+    |(idn,lbl)::t-> 
+      if(idn == -1 || idn == -2) then let new_graph = remove_arc graph id idn in loop new_graph id t 
+      else if (id<idn) then let new_graph = remove_arc graph id idn in loop new_graph id t else loop graph id t
+  in 
+  loop graph id outa 
+
+
+let clear_graph graph = n_fold graph remove_specific_arcs_from_nodes graph
+
+(*let clear_graph gr = let addArcModified bgr id1 id2 edg = if(id1 > id2) then new_arc bgr id1 id2 edg else bgr  in 
+  e_fold gr (addArcModified) (clone_nodes gr) 
+*)
+
 
 
 let export_to_graph path = 
@@ -116,6 +152,16 @@ let export_to_graph path =
   let infile = open_in path in
   let testH = all_hackers infile in  
   print_list_hackers testH;
+
+  let path_bip = open_in path in
+  let hosts_list = all_hosts path_bip in
+  let path_bip = open_in path in
+  let hacker_list = all_hackers path_bip in  
+  let graph_init = create_nodes hacker_list hosts_list in 
+  let graph_init = create_arcs graph_init hacker_list hosts_list in 
+  let graph_init = add_sink_to_graph graph_init hosts_list (List.length hacker_list) in 
+  let graph_init = add_source_to_graph graph_init hacker_list in
+  let () = write_file "./graphs/graph_init" graph_init in export graph_init "./graphs/graph_init.dot";
 
 
 
