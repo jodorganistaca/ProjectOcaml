@@ -63,17 +63,15 @@ let rec update_flow aug path graph =
       |None -> graph
     else graph
 
-let rec print_out_arcs outa =
-  match outa with 
-  |((node_id, node_arc) :: tail) -> node_arc + print_out_arcs tail
-  |[] -> 0
-
-let rec flow_max graph _source _sink =
+let flow_max graph _source _sink =
+  let rec flow_max_loop graph _source _sink max_flow =
   let rec exist_path = find_path graph _source _sink [] in print_out_solution exist_path ;
   match exist_path with 
-  |None-> let outa = out_arcs graph _sink in Printf.printf "sol: %d \n" (print_out_arcs outa); graph 
+  |None-> graph 
   |Some [] -> graph
   |Some path -> 
-    let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug ;
+    let aug = (augmentation graph exist_path) in Printf.printf "augmentation: %d \n" aug;
     let updated_graph = update_flow aug exist_path graph in
-    flow_max updated_graph _source _sink
+    let max_flow = max_flow + aug in Printf.printf "sol: %d \n" max_flow ;
+    flow_max_loop updated_graph _source _sink max_flow
+  in flow_max_loop graph _source _sink 0

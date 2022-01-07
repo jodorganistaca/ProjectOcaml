@@ -21,7 +21,7 @@ clean:
 	-rm -rf *.cmo ftest *.cmi
 
 test:
-	./ftest ../graphs/graph1 0 5 ../graphs/graph1_out
+	./ftest ../graphs/graph_cycle 0 5 ../graphs/graph_cycle_out
 
 clean_graphs:
 	-rm -rf ../graphs/*.dot ../graphs/*.svg
