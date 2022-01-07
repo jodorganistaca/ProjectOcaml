@@ -37,7 +37,7 @@ let () =
     begin
       let configfile = Sys.argv.(1) in
       let () = export_to_graph configfile in 
-      let graph = from_file "../graphs/graph_init" in export graph (configfile ^ ".dot");
+      let graph = from_file "../graphs/graph_init" in export graph "../graphs/graph_init.dot";
       let newgraph = gmap graph (int_of_string) in
       let updated_graph = flow_max newgraph (-1) (-2) in
       let updated_graph = clear_graph updated_graph in
