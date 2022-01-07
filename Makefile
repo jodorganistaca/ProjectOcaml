@@ -20,15 +20,23 @@ clean:
 
 test1:
 	./ftest.native ./graphs/graph1 0 5 ./graphs/graph1_out
+	dot -Tsvg ./graphs/graph1.dot > ./graphs/graph1.svg
+	dot -Tsvg ./graphs/graph1_out.dot > ./graphs/graph1_out.svg
 
 test2:
 	./ftest.native ./graphs/graph2 0 5 ./graphs/graph2_out
+	dot -Tsvg ./graphs/graph2.dot > ./graphs/graph2.svg
+	dot -Tsvg ./graphs/graph2_out.dot > ./graphs/graph2_out.svg
 
 test_cycle:
 	./ftest.native ./graphs/graph_cycle 0 9 ./graphs/graph_cycle_out
+	dot -Tsvg ./graphs/graph_cycle.dot > ./graphs/graph_cycle.svg
+	dot -Tsvg ./graphs/graph_cycle_out.dot > ./graphs/graph_cycle_out.svg
 
 test_no_solution:
-	./ftest.native ./graphs/simple_graph 0 3 ./graphs/simpl_graph_out
+	./ftest.native ./graphs/simple_graph 0 3 ./graphs/simple_graph_out
+	dot -Tsvg ./graphs/simple_graph.dot > ./graphs/simple_graph.svg
+	dot -Tsvg ./graphs/simple_graph_out.dot > ./graphs/simple_graph_out.svg
 
 clean_graphs:
 	-rm -rf ./graphs/*.dot ./graphs/*.svg ./graphs/*_out ./graphs/graph_init
