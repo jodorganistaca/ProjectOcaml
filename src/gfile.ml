@@ -29,6 +29,7 @@ let export graph dot_file_path =
   rankdir=LR;
   size=\"18,15\"
   node [shape=circle];\n";
+  (*n_iter graph (fun id -> Printf.printf "new node: %d \n" id ; fprintf ff "  %d \n" id);*)
   e_iter graph (fun id1 id2 lbl -> fprintf ff "  %d -> %d [label = \"%s\"]; \n" id1 id2 lbl);
   fprintf ff "}";
   close_out ff;

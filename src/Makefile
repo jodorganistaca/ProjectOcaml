@@ -23,11 +23,14 @@ clean:
 test:
 	./ftest ../graphs/graph1 0 5 ../graphs/graph1_out
 
-dot_in:
-	dot -Tsvg ../graphs/graph1.dot > ../graphs/graph1.svg
+clean_graphs:
+	-rm -rf ../graphs/*.dot ../graphs/*.svg
 
-dot_out:
-	dot -Tsvg ../graphs/updated_graph.dot > ../graphs/updated_graph.svg
+bip:
+	./ftest "../pb_bp/confbp" -b
 
-dot_bip:
-	dot -Tsvg ../graphs/graph_init.dot > ../graphs/graph_init.svg
+exp:
+	./ftest ../graphs/$N -e
+
+dot:
+	dot -Tsvg ../graphs/$N.dot > ../graphs/$N.svg
