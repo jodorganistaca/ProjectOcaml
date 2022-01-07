@@ -43,6 +43,8 @@ clean_graphs:
 
 bip:
 	./ftest.native ./pb_bp/confbp -b
+	dot -Tsvg ./graphs/graph_init.dot > ./graphs/graph_init.svg
+	dot -Tsvg ./graphs/graph_init_out.dot > ./graphs/graph_init_out.svg
 
 dot:
 	./ftest.native ./graphs/$N -e
