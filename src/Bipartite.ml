@@ -161,7 +161,7 @@ let export_to_graph path =
   let graph_init = create_arcs graph_init hacker_list hosts_list in 
   let graph_init = add_sink_to_graph graph_init hosts_list (List.length hacker_list) in 
   let graph_init = add_source_to_graph graph_init hacker_list in
-  let () = write_file "../graphs/graph_init" graph_init in export graph_init "../graphs/graph_init.dot";
+  let () = write_file "./graphs/graph_init" graph_init in export graph_init "./graphs/graph_init.dot";
 
 
 

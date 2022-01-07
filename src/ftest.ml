@@ -30,22 +30,22 @@ let () =
       let graph = from_file infile in export graph (infile ^ ".dot");
       exit 0
     end ;
-  
+
   (* Use ford fulkerson to solve bipartite problem*)
   (* Arguments are : configuration-file(1) -b(2) *)
   if (Array.length Sys.argv == 3 && Sys.argv.(2) = "-b") then
     begin
       let configfile = Sys.argv.(1) in
       let () = export_to_graph configfile in 
-      let graph = from_file "../graphs/graph_init" in export graph "../graphs/graph_init.dot";
+      let graph = from_file "./graphs/graph_init" in export graph "./graphs/graph_init.dot";
       let newgraph = gmap graph (int_of_string) in
       let updated_graph = flow_max newgraph (-1) (-2) in
       let updated_graph = clear_graph updated_graph in
       let outgraph = gmap updated_graph (string_of_int) in  
-      export outgraph ("../graphs/graph_init_out" ^ ".dot");
+      export outgraph ("./graphs/graph_init_out" ^ ".dot");
       exit 0
     end ;
-  
+
   (* FordFulkerson *)
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
 

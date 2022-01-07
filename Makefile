@@ -18,20 +18,26 @@ clean:
 	-rm -rf _build/
 	-rm ftest.native
 
-clean:
-	-rm -rf *.cmo ftest *.cmi
+test1:
+	./ftest.native ./graphs/graph1 0 5 ./graphs/graph1_out
 
-test:
-	./ftest.native ./graphs/graph_cycle 0 5 ./graphs/graph_cycle_out
+test2:
+	./ftest.native ./graphs/graph2 0 5 ./graphs/graph2_out
+
+test_cycle:
+	./ftest.native ./graphs/graph_cycle 0 9 ./graphs/graph_cycle_out
+
+test_no_solution:
+	./ftest.native ./graphs/simple_graph 0 3 ./graphs/simpl_graph_out
 
 clean_graphs:
-	-rm -rf ./graphs/*.dot ./graphs/*.svg
+	-rm -rf ./graphs/*.dot ./graphs/*.svg ./graphs/*_out ./graphs/graph_init
 
 bip:
 	./ftest.native ./pb_bp/confbp -b
 
-exp:
+dot:
 	./ftest.native ./graphs/$N -e
 
-dot:
-	dot -Tsvg ../graphs/$N.dot > ../graphs/$N.svg
+svg:
+	dot -Tsvg ./graphs/$N.dot > ./graphs/$N.svg
