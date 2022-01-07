@@ -14,7 +14,7 @@ let description_usage =
   Printf.printf "%s configfile -b \n\n%!"  Sys.argv.(0) 
 
 let () =
-  Printf.printf "%d %s %s %b\n\n%!"  (Array.length Sys.argv) Sys.argv.(1) Sys.argv.(2) (Array.length Sys.argv == 3 && Sys.argv.(2) = "-e");
+
   (* Check the number of command-line arguments *)
   if (Array.length Sys.argv <> 5 && Array.length Sys.argv <> 3) then
     begin
@@ -22,6 +22,8 @@ let () =
       exit 0
     end ;
 
+  (* Export a graph to dot format*)
+  (* Arguments are : infile(1) -e(2) *)
   if (Array.length Sys.argv == 3 && Sys.argv.(2) = "-e") then
     begin
       let infile = Sys.argv.(1) in
@@ -29,6 +31,8 @@ let () =
       exit 0
     end ;
   
+  (* Use ford fulkerson to solve bipartite problem*)
+  (* Arguments are : configuration-file(1) -b(2) *)
   if (Array.length Sys.argv == 3 && Sys.argv.(2) = "-b") then
     begin
       let configfile = Sys.argv.(1) in
@@ -42,6 +46,7 @@ let () =
       exit 0
     end ;
   
+  (* FordFulkerson *)
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
 
   let infile = Sys.argv.(1)
@@ -52,13 +57,18 @@ let () =
   and _sink = int_of_string Sys.argv.(3)
   in
 
-  (* Open file *)
-
-
+  (* Open file  and export to dot*)
   let graph = from_file infile in export graph (infile ^ ".dot");
+
+  (* Create new graph to prepare the input graph. A int graph*)
   let newgraph = gmap graph (int_of_string) in
+
+  (* Compute the ford fulkerson algorith. *)
   let updated_graph = flow_max newgraph _source _sink in
+
+  (* Create new graph to prepare the output graph. A String graph*)
   let outgraph = gmap updated_graph (string_of_int) in  
+  (* Export output graph to dot format*)
   export outgraph (outfile ^ ".dot");
   (* Rewrite the graph that has been read. *)
   let () = write_file outfile outgraph in
