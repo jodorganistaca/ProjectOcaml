@@ -76,14 +76,17 @@ let give_number_to_h list_of_h =
   in 
   loop list_of_h 0
 
-let are_compatible ha (g,d,p,s,m,n) = 
+let add_one_if cond n = if (cond) then n else n+1
+
+let evaluate_cost ha (g,d,p,s,m,n) = 
   match ha with
   |(gender,day,pet,smoke,mixg)->
-    let res = ((String.equal d day)||(String.equal d "both"))
-              &&((String.equal p pet))
-              &&(String.equal s smoke)
-              &&(((String.equal m "mixed")&&(String.equal mixg "mixed"))||(((String.equal m "nomixed")||(String.equal mixg "nomixed"))&&(String.equal gender g))) in res
-
+    let res = 0 in 
+    let res = add_one_if ((String.equal d day)||(String.equal d "both")) res in
+    let res = add_one_if (String.equal p pet) res in
+    let res = add_one_if (String.equal s smoke) res in 
+    let res = add_one_if (((String.equal m "mixed")&&(String.equal mixg "mixed"))||(((String.equal m "nomixed")||(String.equal mixg "nomixed"))&&(String.equal gender g))) res in
+    res
 
 let create_nodes list_ha list_ho = 
   let rec loop list_ha list_ho graph id =
@@ -102,9 +105,9 @@ let create_arcs graph list_ha list_ho =
       let rec loop2 graph ha list_ho len_ha len_ho =
         match (list_ho) with
         |([])->graph
-        |(ho::tho)-> if (are_compatible ha ho) then 
-            let graph = new_arc graph (len_ha - List.length list_ha) ((len_ha + len_ho) - List.length list_ho) "1" in loop2 graph ha tho len_ha len_ho else
-            loop2 graph ha tho len_ha len_ho in
+        |(ho::tho)-> let cost = evaluate_cost ha ho in
+          let graph = new_arc graph (len_ha - List.length list_ha) ((len_ha + len_ho) - List.length list_ho) ("1",cost) in loop2 graph ha tho len_ha len_ho
+      in
       let graph = loop2 graph ha list_ho len_ha len_ho
       in loop graph tha list_ho len_ha len_ho
   in 
@@ -113,7 +116,7 @@ let add_source_to_graph graph list_ha =
   let rec loop graph list_ha len_ha =
     match (list_ha) with 
     |[]->graph
-    |ha::t->let new_graph = (new_arc graph (-1) (len_ha-List.length list_ha) "1") in loop new_graph t len_ha
+    |ha::t->let new_graph = (new_arc graph (-1) (len_ha-List.length list_ha) ("1",0)) in loop new_graph t len_ha
   in 
   loop graph list_ha (List.length list_ha)
 
@@ -121,7 +124,7 @@ let add_sink_to_graph graph list_ho len_ha=
   let rec loop graph list_ho len_ho len_ha =
     match (list_ho) with 
     |[]->graph
-    |(gender, day, pet, smoke, mixg, number)::t->let new_graph = (new_arc graph (len_ha+(len_ho-List.length list_ho)) (-2) number) in loop new_graph t len_ho len_ha
+    |(gender, day, pet, smoke, mixg, number)::t->let new_graph = (new_arc graph (len_ha+(len_ho-List.length list_ho)) (-2) (number,0)) in loop new_graph t len_ho len_ha
   in 
   loop graph list_ho (List.length list_ho) len_ha
 
@@ -143,6 +146,8 @@ let clear_graph graph = n_fold graph remove_specific_arcs_from_nodes graph
   e_fold gr (addArcModified) (clone_nodes gr) 
 *)
 
+let string_of_tuple (lbl,cost)= "("^lbl^","^(string_of_int cost)^")"
+
 
 
 let export_to_graph path = 
@@ -161,6 +166,7 @@ let export_to_graph path =
   let graph_init = create_arcs graph_init hacker_list hosts_list in 
   let graph_init = add_sink_to_graph graph_init hosts_list (List.length hacker_list) in 
   let graph_init = add_source_to_graph graph_init hacker_list in
+  let graph_init = gmap graph_init string_of_tuple in
   let () = write_file "./graphs/graph_init" graph_init in export graph_init "./graphs/graph_init.dot";
 
 
